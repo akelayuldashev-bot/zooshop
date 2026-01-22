@@ -1,0 +1,56 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="favorites-dark">
+
+<div class="favorites-header-center">
+    <div class="fav-heart">❤</div>
+    <h1></h1>
+    <p>Ваши сохранённые товары</p>
+</div>
+
+
+    {% if items %}
+    <div class="favorites-grid">
+        {% for item in items %}
+        <div class="favorite-card-dark" data-id="{{ item.product.id }}">
+
+            <div class="favorite-image">
+                {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+                {% else %}
+                <img src="{% static 'images/no-image.png' %}">
+                {% endif %}
+            </div>
+
+            <div class="favorite-info">
+                <h3>{{ item.product.title }}</h3>
+                <span class="favorite-price">{{ item.product.price }} $</span>
+            </div>
+
+            <a href="{% url 'shop:remove_from_favorite' item.product.id %}"
+               class="favorite-remove favorite-btn"
+               title="Удалить">
+                ✕
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="favorites-empty-dark">
+        <div class="empty-heart">❤</div>
+        <h3>Здесь пока пусто</h3>
+        <p>Сохраняйте товары — они появятся здесь</p>
+    </div>
+    {% endif %}
+
+</section>
+
+<script src="{% static 'js/favorite.js' %}"></script>
+
+
+{% endblock %}

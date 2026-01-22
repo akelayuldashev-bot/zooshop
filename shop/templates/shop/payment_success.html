@@ -1,0 +1,36 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<section class="success-dark">
+    <div class="success-card-dark">
+
+        <!-- GLOW RING -->
+        <div class="success-ring">
+            <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="46"/>
+                <path d="M30 52 L45 66 L70 38"/>
+            </svg>
+        </div>
+
+        <h1 class="success-title-dark">
+            Платёж подтверждён
+        </h1>
+
+        <p class="success-text-dark">
+            Транзакция успешно завершена.
+            Заказ передан в обработку.
+        </p>
+
+        <div class="success-divider"></div>
+
+        <a href="{% url 'shop:index' %}" class="success-btn-dark">
+            Вернуться в магазин
+        </a>
+
+    </div>
+</section>
+
+
+
+{% endblock %}

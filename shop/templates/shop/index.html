@@ -1,0 +1,52 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 80px;">
+    <div class="catalog">
+
+        {% for product in products %}
+        <div class="card">
+
+            {% if product.discount %}
+            <div class="label">{{ product.discount }}%</div>
+            {% endif %}
+
+            <!-- КАРТИНКА → ДЕТАЛЬНАЯ -->
+            <a href="{% url 'shop:product_detail' product.slug %}">
+                <img src="{{ product.image.url }}"
+                     class="card__image"
+                     alt="{{ product.title }}">
+            </a>
+
+            <div class="info">
+
+                <!-- НАЗВАНИЕ → ДЕТАЛЬНАЯ -->
+                <a href="{% url 'shop:product_detail' product.slug %}"
+                   class="product-title-link">
+                    <h2 class="info__title">{{ product.title }}</h2>
+                </a>
+
+                <p class="info__price">
+                    Price: {{ product.price }} USD
+                </p>
+
+                <!-- КНОПКА -->
+                <a href="{% url 'shop:add_to_cart' product.id %}"
+                   class="add-to-cart-btn">
+                    В корзину
+                </a>
+
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-muted">
+            Товаров пока нет
+        </p>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

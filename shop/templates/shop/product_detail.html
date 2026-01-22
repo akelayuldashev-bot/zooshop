@@ -1,0 +1,113 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-detail container">
+
+    <div class="product-detail__wrapper">
+
+        <div class="product-detail__image-block js-tilt">
+            <img src="{{ product.image.url }}"
+                 alt="{{ product.title }}"
+                 class="product-detail__image">
+        </div>
+
+        <div class="product-detail__info">
+            <h1 class="product-detail__title">{{ product.title }}</h1>
+
+            <p class="product-detail__price">
+                {{ product.price }} USD
+            </p>
+
+            {% if product.description %}
+            <div class="product-detail__desc">
+                {{ product.description|linebreaks }}
+            </div>
+            {% else %}
+            <p class="product-detail__desc text-muted">
+                Описание пока не добавлено
+            </p>
+            {% endif %}
+
+
+            <div class="product-detail__buttons sticky-buy">
+                <a href="{% url 'shop:add_to_cart' product.id %}"
+                   class="product-btn">
+                    В корзину
+                </a>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'shop:add_to_favorite' product.id %}"
+                   class="product-btn favorite">
+                    ♥
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="product-comments">
+
+        <h2 class="form-title">Комментарии</h2>
+
+        {% if user.is_authenticated %}
+        <form method="post"
+              action="{% url 'comments:add_comment' product.id %}"
+              class="comment-form">
+            {% csrf_token %}
+            <textarea name="text"
+                      rows="4"
+                      placeholder="Напишите комментарий..."
+                      required></textarea>
+            <button type="submit">Отправить</button>
+        </form>
+        {% else %}
+        <p class="text-muted">
+            Чтобы оставить комментарий —
+            <a href="{% url 'shop:login' %}">войдите</a>
+        </p>
+        {% endif %}
+
+        <div class="comments-list">
+            {% for comment in product.comments.all %}
+            <div class="comment-item">
+
+                <div class="comment-header">
+                    <div class="comment-meta">
+                        {{ comment.user.username }} ·
+                        {{ comment.created_at|date:"d.m.Y H:i" }}
+                    </div>
+
+                    {% if comment.user == user %}
+                    <form method="post"
+                          action="{% url 'comments:delete_comment' comment.id %}"
+                          class="delete-comment-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="delete-comment-btn"
+                                title="Удалить комментарий">
+                            ✕
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+
+                <div class="comment-text">
+                    {{ comment.text }}
+                </div>
+
+            </div>
+            {% empty %}
+            <p class="text-muted">Комментариев пока нет</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/product_detail.js' %}"></script>
+{% endblock %}

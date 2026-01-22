@@ -1,0 +1,39 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<section class="checkout-pro">
+    <div class="checkout-card-pro">
+
+        <h1 class="checkout-title-pro">
+            💳 Подтверждение оплаты
+        </h1>
+
+        <div class="checkout-list-pro">
+            {% for product in products %}
+            <div class="checkout-row-pro">
+                <span>{{ product.title }}</span>
+                <strong>{{ product.price }} $</strong>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="checkout-total-pro">
+            Итого: <strong>{{ total_price }} $</strong>
+        </div>
+
+        <form method="post" action="{% url 'shop:create_checkout_session' %}">
+            {% csrf_token %}
+            <button class="checkout-pay-pro">
+                Оплатить
+            </button>
+        </form>
+
+        <p class="checkout-note-pro">
+            Безопасная оплата через Stripe
+        </p>
+
+    </div>
+</section>
+
+
+{% endblock %}

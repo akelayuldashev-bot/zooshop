@@ -1,0 +1,50 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+
+<section class="cart-pro">
+    <div class="cart-card-pro">
+
+        <h1 class="cart-title-pro">
+            🛒 Ваша корзина
+        </h1>
+
+        {% if cart_items %}
+        <div class="cart-items-pro">
+            {% for item in cart_items %}
+            <div class="cart-item-pro">
+                <div class="cart-item-info">
+                    <h3>{{ item.product.title }}</h3>
+                    <p>{{ item.quantity }} × {{ item.product.price }} $</p>
+                </div>
+
+                <div class="cart-item-right">
+                    <span class="cart-item-price">
+                        {{ item.total }} $
+                    </span>
+
+                    <a href="{% url 'shop:remove_from_cart' item.product.id %}"
+                       class="cart-remove-pro">✕</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="cart-footer-pro">
+            <div class="cart-total-pro">
+                Итого: <strong>{{ total_price }} $</strong>
+            </div>
+
+            <a href="{% url 'shop:checkout' %}" class="cart-btn-pro">
+                Перейти к оплате
+            </a>
+        </div>
+
+        {% else %}
+        <p class="cart-empty-pro">Корзина пуста</p>
+        {% endif %}
+
+    </div>
+</section>
+
+
+{% endblock %}

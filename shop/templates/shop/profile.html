@@ -1,0 +1,98 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="profile-container">
+
+    <!-- LEFT -->
+    <aside class="profile-sidebar shadow-lg">
+        <div class="profile-card">
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label class="avatar-wrapper">
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="avatar" class="avatar-img">
+        {% else %}
+            <img src="{% static 'img/avatar-placeholder.png' %}" alt="avatar" class="avatar-img">
+        {% endif %}
+
+        <div class="avatar-overlay">
+            <span>Сменить</span>
+        </div>
+
+        <input type="file" name="avatar" hidden onchange="this.form.submit()">
+    </label>
+</form>
+
+
+            <h4 class="profile-username username-animated">
+                {{ user.username }}
+            </h4>
+
+
+            <span class="badge bg-warning text-dark mt-2">
+                ⭐ Пользователь
+            </span>
+
+            <div class="profile-actions">
+                <a href="{% url 'shop:profile' %}" class="btn zoo-btn">Редактировать</a>
+                <a href="{% url 'shop:favorites' %}" class="btn zoo-btn">Избранное</a>
+                <a href="{% url 'shop:logout' %}" class="btn zoo-btn logout">Выйти</a>
+            </div>
+
+        </div>
+    </aside>
+
+    <!-- CENTER -->
+    <main class="profile-main shadow-lg">
+        <div class="profile-section">
+            <h2>Общая информация</h2>
+            <ul>
+                <li><strong>Логин:</strong> {{ user.username }}</li>
+                <li><strong>Email:</strong> {{ user.email }}</li>
+                <li><strong>Дата регистрации:</strong> {{ user.date_joined }}</li>
+            </ul>
+        </div>
+
+        <div class="profile-section">
+            <h2>Активность</h2>
+            <ul>
+                <li><span class="count" data-count="0">0</span> заказов</li>
+                <li><span class="count" data-count="0">0</span> в избранном</li>
+                <li><span class="count" data-count="0">0</span> комментариев</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- RIGHT -->
+    <aside class="profile-right shadow-lg">
+        <div class="profile-section">
+            <h2>Последние действия</h2>
+            <p>Пока пусто</p>
+        </div>
+    </aside>
+
+</div>
+
+<script>
+    document.querySelectorAll('.count').forEach(el => {
+        const target = +el.dataset.count;
+        let current = 0;
+        const step = Math.max(1, Math.floor(target / 30));
+
+        const interval = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                el.textContent = target;
+                clearInterval(interval);
+            } else {
+                el.textContent = current;
+            }
+        }, 20);
+    });
+</script>
+
+{% endblock %}
